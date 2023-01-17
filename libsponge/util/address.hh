@@ -10,6 +10,7 @@
 #include <utility>
 
 //! Wrapper around [IPv4 addresses](@ref man7::ip) and DNS operations.
+
 class Address {
   public:
     //! \brief Wrapper around [sockaddr_storage](@ref man7::socket).
@@ -17,8 +18,8 @@ class Address {
     class Raw {
       public:
         sockaddr_storage storage{};  //!< The wrapped struct itself.
-        operator sockaddr *();
-        operator const sockaddr *() const;
+        operator sockaddr *();//*raw，返回值就是一个sockaddr类型的
+        operator const sockaddr *() const;//重载，返回的*，是个const类型
     };
 
   private:
