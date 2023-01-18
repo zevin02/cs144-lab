@@ -8,11 +8,13 @@
 
 //! \brief A class that assembles a series of excerpts from a byte stream (possibly out of order,
 //! possibly overlapping) into an in-order byte stream.
+//我们需要把读取的substring进行重组，放到_output这个有序的字节流里面
+
 class StreamReassembler {
   private:
     // Your code here -- add private members as necessary.
 
-    ByteStream _output;  //!< The reassembled in-order byte stream
+    ByteStream _output;  //!< The reassembled in-order byte stream,把重组好的数据放到这里面
     size_t _capacity;    //!< The maximum number of bytes
 
   public:

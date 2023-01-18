@@ -19,7 +19,7 @@ static constexpr unsigned NSEGS = 128;
 static constexpr unsigned MAX_SEG_LEN = 2048;
 
 string read(StreamReassembler &reassembler) {
-    return reassembler.stream_out().read(reassembler.stream_out().buffer_size());
+    return reassembler.stream_out().read(reassembler.stream_out().buffer_size());//把缓冲区里面的所有数据都读取出来
 }
 
 int main() {
@@ -39,11 +39,11 @@ int main() {
             }
             shuffle(seq_size.begin(), seq_size.end(), rd);
 
-            string d(offset, 0);
+            string d(offset, 0);//d就是需要发送的所有数据
             generate(d.begin(), d.end(), [&] { return rd(); });
 
             for (auto [off, sz] : seq_size) {
-                string dd(d.cbegin() + off, d.cbegin() + off + sz);
+                string dd(d.cbegin() + off, d.cbegin() + off + sz);//迭代器，截取了这里面的一段
                 buf.push_substring(move(dd), off, off + sz == offset);
             }
 
