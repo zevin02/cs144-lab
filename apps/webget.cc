@@ -12,7 +12,24 @@ void get_URL(const string &host, const string &path) {
     // You will need to connect to the "http" service on
     // the computer whose name is in the "host" string,
     // then request the URL path given in the "path" string.
+    TCPSocket sock;
+    
+    sock.connect(Address(host,"http"));
+    string req="GET "+path+" HTTP/1.1\r\n";
+    req+="Host: "+host+"\r\n";
+    req+="\r\n";
+    sock.write(req);
+    sock.shutdown(SHUT_WR);//write完毕，关闭闸门，关闭出站字节流，在写入一端口写入，之后就不能调用write写入了
+    string ret;
 
+
+    while(!sock.eof())//读取结束，eof就是文件的末尾
+    {
+        cout<<sock.read();
+    }
+    // ret+=sock.read();
+    sock.close();
+    // cout<<ret<<endl;
     // Then you'll need to print out everything the server sends back,
     // (not just one call to read() -- everything) until you reach
     // the "eof" (end of file).

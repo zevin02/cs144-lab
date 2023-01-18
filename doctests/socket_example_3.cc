@@ -16,12 +16,3 @@ if (recvd != "hi there" || recvd2 != "hi yourself") {
     throw std::runtime_error("wrong data received");
 }
 
-
-class s{
-
-};
-
-int main()
-{
-    return 0;
-}

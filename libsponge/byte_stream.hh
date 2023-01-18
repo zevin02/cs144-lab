@@ -2,7 +2,12 @@
 #define SPONGE_LIBSPONGE_BYTE_STREAM_HH
 
 #include <string>
-
+#include<queue>
+#include<iostream>
+#include<deque>
+#include<list>
+using namespace std;
+//一个有序的字节流
 //! \brief An in-order byte stream.
 
 //! Bytes are written on the "input" side and read from the "output"
@@ -16,7 +21,13 @@ class ByteStream {
     // all, but if any of your tests are taking longer than a second,
     // that's a sign that you probably want to keep exploring
     // different approaches.
-
+    // 需要有一个缓冲区
+  
+    list<char> buff{};//这个list对象也要初始化
+    size_t _capcity=0;//总共有多少容量
+    size_t wcnt=0;//总共写了多少字节
+    size_t rcnt=0;//读取了多少字节
+    bool _end=false;//是否写入达到上限
     bool _error{};  //!< Flag indicating that the stream suffered an error.
 
   public:
@@ -29,6 +40,7 @@ class ByteStream {
     //! Write a string of bytes into the stream. Write as many
     //! as will fit, and return how many were written.
     //! \returns the number of bytes accepted into the stream
+    //这些是writer程序的接口
     size_t write(const std::string &data);
 
     //! \returns the number of additional bytes that the stream has space for
@@ -39,6 +51,8 @@ class ByteStream {
 
     //! Indicate that the stream suffered an error.
     void set_error() { _error = true; }
+
+
     //!@}
 
     //! \name "Output" interface for the reader
@@ -46,6 +60,9 @@ class ByteStream {
 
     //! Peek at next "len" bytes of the stream
     //! \returns a string
+
+    //这些都是reader程序的接口
+
     std::string peek_output(const size_t len) const;
 
     //! Remove bytes from the buffer
