@@ -5,7 +5,8 @@
 
 #include <cstdint>
 #include <string>
-
+#include<map>
+#include<set>
 //! \brief A class that assembles a series of excerpts from a byte stream (possibly out of order,
 //! possibly overlapping) into an in-order byte stream.
 //我们需要把读取的substring进行重组，放到_output这个有序的字节流里面
@@ -16,6 +17,8 @@ class StreamReassembler {
 
     ByteStream _output;  //!< The reassembled in-order byte stream,把重组好的数据放到这里面
     size_t _capacity;    //!< The maximum number of bytes
+    map<size_t,string> unpushstr{};//未放入字节流的子串，同时进行按小到大排序
+    bool _eof=false;//如果eof，说明没有子串需要组装了
 
   public:
     //! \brief Construct a `StreamReassembler` that will store up to `capacity` bytes.
@@ -32,6 +35,7 @@ class StreamReassembler {
     //! \param index indicates the index (place in sequence) of the first byte in `data`
     //! \param eof the last byte of `data` will be the last byte in the entire stream
     void push_substring(const std::string &data, const uint64_t index, const bool eof);
+    size_t func(const size_t index,const string data,bool isunpush,const bool eof);
 
     //! \name Access the reassembled byte stream
     //!@{
