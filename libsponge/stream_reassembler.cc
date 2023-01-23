@@ -25,8 +25,8 @@ void StreamReassembler::push_substring(const string &data, const size_t index, c
 
     if (!unpushstr.empty()) {
         // 有未push的
-        map<size_t,string> copy(unpushstr);
-        for (auto& pair : copy) {
+        map<size_t, string> copy(unpushstr);
+        for (auto &pair : copy) {
             if (pair.first > _index)
                 break;
             _index = func(pair.first, pair.second, true, eof);
@@ -48,26 +48,32 @@ size_t StreamReassembler::func(const size_t index,
         _eof = true;
     }
     size_t now = _output.bytes_written();  // 统计写入了多少个字节了,now就是编号
-    //但是这个时候容器还可以添加数据
-    
+    // 但是这个时候容器还可以添加数据
+
     if (index == now) {
         // 当前的坐标刚刚好到达了正确的位置
         if (_output.buffer_size() + data.size() <= _capacity) {
             _output.write(data);
-            if(isunpush)
-            {
+            if (isunpush) {
                 unpushstr.erase(index);
             }
             return index + data.size();
 
         } else {
             if (_output.buffer_size() <= _capacity) {
-                string sub = data.substr(0, _capacity - index);
+                string sub = data.substr(0, _capacity);
+                if (isunpush) {
+                    unpushstr.erase(index);
+                }
+                
+                //同时还要保存起来后来的数据
                 _output.write(sub);
-                return _capacity;
+                //这个地方添加多出来的数据
+                
+                return now+sub.size();
             }
             if (!isunpush)
-                unpushstr[index]=data;
+                unpushstr[index] = data;
             return now;
         }
 
@@ -86,13 +92,15 @@ size_t StreamReassembler::func(const size_t index,
             string sub = data.substr(now - index);  // 截取了
             if (_output.buffer_size() + sub.size() <= _capacity) {
                 // 有重叠，并处理后写入
+                if (isunpush) {
+                    unpushstr.erase(index);
+                }
                 _output.write(sub);
 
                 return index + data.size();
 
             } else {
                 if (_output.buffer_size() <= _capacity) {
-
                     string sb = sub.substr(0, _capacity - _output.buffer_size());
                     _output.write(sb);
                     return _capacity;
@@ -102,14 +110,14 @@ size_t StreamReassembler::func(const size_t index,
                 if (isunpush) {
                     unpushstr.erase(index);
                 }
-                unpushstr[now-index]=sub;
+                unpushstr[now - index] = sub;
                 return now;
             }
         }
     } else {
         // 说明这个坐标在后面
         if (!isunpush) {
-            unpushstr[index]=data;
+            unpushstr[index] = data;
         }
         return now;
     }
