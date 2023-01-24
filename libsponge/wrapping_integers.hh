@@ -6,7 +6,7 @@
 
 //! \brief A 32-bit integer, expressed relative to an arbitrary initial sequence number (ISN)
 //! \note This is used to express TCP sequence numbers (seqno) and acknowledgment numbers (ackno)
-class WrappingInt32 {
+class WrappingInt32 {//这个就是tcp里面使用的序列号，但是我们需要把这个转化成绝对序列号（绝对序列号是64位的）和流索引（在streeam里面组装，64位的）
   private:
     uint32_t _raw_value;  //!< The raw 32-bit stored integer
 
@@ -21,7 +21,7 @@ class WrappingInt32 {
 //! \param n the absolute sequence number
 //! \param isn the initial sequence number
 //! \returns the relative sequence number
-WrappingInt32 wrap(uint64_t n, WrappingInt32 isn);
+WrappingInt32 wrap(uint64_t n, WrappingInt32 isn);//绝对序列号转化成tcp中的相对序列号
 
 //! Transform a 32-bit relative sequence number into a 64-bit absolute sequence number (zero-indexed)
 //! \param n The relative sequence number
@@ -33,7 +33,9 @@ WrappingInt32 wrap(uint64_t n, WrappingInt32 isn);
 //! runs from the local TCPSender to the remote TCPReceiver and has one ISN,
 //! and the other stream runs from the remote TCPSender to the local TCPReceiver and
 //! has a different ISN.
-uint64_t unwrap(WrappingInt32 n, WrappingInt32 isn, uint64_t checkpoint);
+//checkpoint把最后一个重新组装的字节当作checkpoint
+//
+uint64_t unwrap(WrappingInt32 n, WrappingInt32 isn, uint64_t checkpoint);//将一个相对序列号转化成绝对序列号
 
 //! \name Helper functions
 //!@{

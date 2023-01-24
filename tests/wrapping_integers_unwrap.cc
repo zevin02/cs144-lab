@@ -22,7 +22,7 @@ int main() {
         // Non-zero ISN
         test_should_be(unwrap(WrappingInt32(UINT32_MAX), WrappingInt32(10), 3 * (1ul << 32)), 3 * (1ul << 32) - 11);
         // Big unwrap
-        test_should_be(unwrap(WrappingInt32(UINT32_MAX), WrappingInt32(0), 0), static_cast<uint64_t>(UINT32_MAX));
+        test_should_be(unwrap(WrappingInt32(UINT32_MAX), WrappingInt32(0), 0), static_cast<uint64_t>(UINT32_MAX));//这里有问题
         // Unwrap a non-zero ISN
         test_should_be(unwrap(WrappingInt32(16), WrappingInt32(16), 0), 0ul);
 
