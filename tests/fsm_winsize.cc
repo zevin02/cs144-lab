@@ -25,7 +25,7 @@ static constexpr unsigned MIN_SWIN_MUL = 2;
 static constexpr unsigned MAX_SWIN_MUL = 6;
 
 int main() {
-    try {
+   超时超时 try {
         auto rd = get_random_generator();
         TCPConfig cfg{};
         cfg.send_capacity = MAX_SWIN * MAX_SWIN_MUL;

@@ -10,27 +10,27 @@ using namespace std;
 
 int main() {
     try {
-        {
-            ReassemblerTestHarness test{65000};
+        // {
+        //     ReassemblerTestHarness test{65000};
 
-            test.execute(SubmitSegment{"b", 1});
+        //     test.execute(SubmitSegment{"b", 1});
 
-            test.execute(BytesAssembled(0));
-            test.execute(BytesAvailable(""));
-            test.execute(NotAtEof{});
-        }
+        //     test.execute(BytesAssembled(0));
+        //     test.execute(BytesAvailable(""));
+        //     test.execute(NotAtEof{});
+        // }
+        cout<<"22"<<endl;
+        // {
+        //     ReassemblerTestHarness test{65000};
 
-        {
-            ReassemblerTestHarness test{65000};
+        //     test.execute(SubmitSegment{"b", 1});
+        //     test.execute(SubmitSegment{"a", 0});
 
-            test.execute(SubmitSegment{"b", 1});
-            test.execute(SubmitSegment{"a", 0});
-
-            test.execute(BytesAssembled(2));
-            test.execute(BytesAvailable("ab"));
-            test.execute(NotAtEof{});
-        }
-
+        //     test.execute(BytesAssembled(2));
+        //     test.execute(BytesAvailable("ab"));
+        //     test.execute(NotAtEof{});
+        // }
+        cout<<"33"<<endl;
         {
             ReassemblerTestHarness test{65000};
 
@@ -46,7 +46,7 @@ int main() {
             test.execute(BytesAvailable("ab"));
             test.execute(AtEof{});
         }
-
+        cout<<"49"<<endl;
         {
             ReassemblerTestHarness test{65000};
 

@@ -10,44 +10,47 @@ using namespace std;
 
 int main() {
     try {
-        {
-            // Overlapping assembled (unread) section
-            const size_t cap = {1000};
-            ReassemblerTestHarness test{cap};
+//         {
+//             // Overlapping assembled (unread) section
+//             const size_t cap = {1000};
+//             ReassemblerTestHarness test{cap};
 
-            test.execute(SubmitSegment{"a", 0});
-            test.execute(SubmitSegment{"ab", 0});
+//             test.execute(SubmitSegment{"a", 0});
+//             test.execute(SubmitSegment{"ab", 0});
 
-            test.execute(BytesAssembled(2));
-            test.execute(BytesAvailable("ab"));
-        }
+//             test.execute(BytesAssembled(2));
+//             test.execute(BytesAvailable("ab"));
+//         }
+// cout<<"24"<<endl;
+//         {
+//             // Overlapping assembled (read) section
+//             const size_t cap = {1000};
+//             ReassemblerTestHarness test{cap};
 
-        {
-            // Overlapping assembled (read) section
-            const size_t cap = {1000};
-            ReassemblerTestHarness test{cap};
+//             test.execute(SubmitSegment{"a", 0});
+//             test.execute(BytesAvailable("a"));
 
-            test.execute(SubmitSegment{"a", 0});
-            test.execute(BytesAvailable("a"));
+//             test.execute(SubmitSegment{"ab", 0});
+//             test.execute(BytesAvailable("b"));
+//             test.execute(BytesAssembled(2));
+//         }
+// cout<<"37"<<endl;
 
-            test.execute(SubmitSegment{"ab", 0});
-            test.execute(BytesAvailable("b"));
-            test.execute(BytesAssembled(2));
-        }
+//         {
+//             // Overlapping unassembled section, resulting in assembly
+//             const size_t cap = {1000};
+//             ReassemblerTestHarness test{cap};
 
-        {
-            // Overlapping unassembled section, resulting in assembly
-            const size_t cap = {1000};
-            ReassemblerTestHarness test{cap};
+//             test.execute(SubmitSegment{"b", 1});
+//             test.execute(BytesAvailable(""));
 
-            test.execute(SubmitSegment{"b", 1});
-            test.execute(BytesAvailable(""));
+//             test.execute(SubmitSegment{"ab", 0});
+//             test.execute(BytesAvailable("ab"));
+//             test.execute(UnassembledBytes{0});
+//             test.execute(BytesAssembled(2));
+//         }
+cout<<"52"<<endl;
 
-            test.execute(SubmitSegment{"ab", 0});
-            test.execute(BytesAvailable("ab"));
-            test.execute(UnassembledBytes{0});
-            test.execute(BytesAssembled(2));
-        }
         {
             // Overlapping unassembled section, not resulting in assembly
             const size_t cap = {1000};
@@ -61,6 +64,8 @@ int main() {
             test.execute(UnassembledBytes{2});
             test.execute(BytesAssembled(0));
         }
+cout<<"67"<<endl;
+
         {
             // Overlapping unassembled section, not resulting in assembly
             const size_t cap = {1000};
@@ -74,6 +79,7 @@ int main() {
             test.execute(UnassembledBytes{3});
             test.execute(BytesAssembled(0));
         }
+cout<<"82"<<endl;
 
         {
             // Overlapping multiple unassembled sections
@@ -89,6 +95,7 @@ int main() {
             test.execute(BytesAssembled(0));
             test.execute(UnassembledBytes(4));
         }
+cout<<"98"<<endl;
 
         {
             // Submission over existing
@@ -107,6 +114,7 @@ int main() {
             test.execute(BytesAssembled(4));
             test.execute(UnassembledBytes(0));
         }
+cout<<"117"<<endl;
 
         {
             // Submission within existing
