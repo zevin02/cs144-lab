@@ -19,6 +19,10 @@ class TCPReceiver {
 
     //! The maximum number of bytes we'll store.
     size_t _capacity;
+    bool fin=false;//
+    optional<WrappingInt32> isn{};
+    uint64_t checkpoint=0;//这个checkpoint就是用来记录第一次unwrap的值
+
 
   public:
     //! \brief Construct a TCP receiver

@@ -36,6 +36,7 @@ int main() {
             test.execute(ExpectAckno{WrappingInt32{isn + 13}});
             test.execute(ExpectWindow{cap - 12});
         }
+cout<<__LINE__<<endl;
 
         {
             // Window size expands upon read
@@ -53,6 +54,7 @@ int main() {
             test.execute(ExpectAckno{WrappingInt32{isn + 5}});
             test.execute(ExpectWindow{cap});
         }
+cout<<__LINE__<<endl;
 
         /* remove requirement for corrective ACK on out-of-window segment
             {
@@ -87,6 +89,7 @@ int main() {
             test.execute(ExpectBytes{"ab"});
             test.execute(ExpectWindow{2});
         }
+cout<<__LINE__<<endl;
 
         /* remove requirement for corrective ACK on out-of-window segment
             {
@@ -117,6 +120,7 @@ int main() {
             test.execute(ExpectTotalAssembledBytes{3});
             test.execute(ExpectWindow{cap - 3});
         }
+cout<<__LINE__<<endl;
 
         /* remove requirement for corrective ACK on out-of-window segment
             {

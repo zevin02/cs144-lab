@@ -29,6 +29,7 @@ class Buffer {
         if (not _storage) {
             return {};
         }
+        //string_view并不整整拷贝字符串，而是对c字符串更好的操作，提高性能
         return {_storage->data() + _starting_offset, _storage->size() - _starting_offset};
     }
 

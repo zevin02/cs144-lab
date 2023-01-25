@@ -28,6 +28,7 @@ int main() {
             test.execute(ExpectSegment{}.with_no_flags().with_data("abcd"));
             test.execute(ExpectNoSegment{});
         }
+cout<<__LINE__<<endl;
 
         {
             TCPConfig cfg;
@@ -42,6 +43,7 @@ int main() {
             test.execute(ExpectSegment{}.with_no_flags().with_data("abcdef"));
             test.execute(ExpectNoSegment{});
         }
+cout<<__LINE__<<endl;
 
         {
             const size_t MIN_WIN = 5;
@@ -62,6 +64,7 @@ int main() {
                 test.execute(ExpectNoSegment{});
             }
         }
+cout<<__LINE__<<endl;
 
         {
             TCPConfig cfg;
@@ -78,6 +81,7 @@ int main() {
             test.execute(ExpectSegment{}.with_no_flags().with_data("45678"));
             test.execute(ExpectNoSegment{});
         }
+cout<<__LINE__<<endl;
 
         {
             TCPConfig cfg;
@@ -96,6 +100,7 @@ int main() {
             test.execute(ExpectSegment{}.with_fin(true).with_data(""));
             test.execute(ExpectNoSegment{});
         }
+cout<<__LINE__<<endl;
 
         {
             TCPConfig cfg;
@@ -114,6 +119,7 @@ int main() {
             test.execute(ExpectSegment{}.with_fin(true).with_data(""));
             test.execute(ExpectNoSegment{});
         }
+cout<<__LINE__<<endl;
 
         {
             TCPConfig cfg;
@@ -132,6 +138,8 @@ int main() {
             test.execute(ExpectSegment{}.with_fin(true).with_data("4567"));
             test.execute(ExpectNoSegment{});
         }
+cout<<__LINE__<<endl;
+
     } catch (const exception &e) {
         cerr << e.what() << endl;
         return 1;

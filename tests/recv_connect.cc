@@ -26,7 +26,7 @@ int main() {
             test.execute(ExpectUnassembledBytes{0});
             test.execute(ExpectTotalAssembledBytes{0});
         }
-
+cout<<__LINE__<<endl;
         {
             TCPReceiverTestHarness test{5435};
             test.execute(ExpectAckno{std::optional<WrappingInt32>{}});
@@ -37,6 +37,7 @@ int main() {
             test.execute(ExpectUnassembledBytes{0});
             test.execute(ExpectTotalAssembledBytes{0});
         }
+cout<<__LINE__<<endl;
 
         {
             TCPReceiverTestHarness test{5435};
@@ -48,6 +49,7 @@ int main() {
             test.execute(ExpectUnassembledBytes{0});
             test.execute(ExpectTotalAssembledBytes{0});
         }
+cout<<__LINE__<<endl;
 
         {
             TCPReceiverTestHarness test{5435};
@@ -60,6 +62,7 @@ int main() {
             test.execute(ExpectUnassembledBytes{0});
             test.execute(ExpectTotalAssembledBytes{0});
         }
+cout<<__LINE__<<endl;
 
         {
             TCPReceiverTestHarness test{5435};
@@ -76,6 +79,7 @@ int main() {
             test.execute(ExpectUnassembledBytes{0});
             test.execute(ExpectTotalAssembledBytes{0});
         }
+cout<<__LINE__<<endl;
 
         {
             TCPReceiverTestHarness test{4000};
@@ -85,6 +89,7 @@ int main() {
             test.execute(ExpectUnassembledBytes{0});
             test.execute(ExpectTotalAssembledBytes{0});
         }
+cout<<__LINE__<<endl;
 
         {
             // Window overflow
@@ -92,6 +97,8 @@ int main() {
             TCPReceiverTestHarness test{cap};
             test.execute(ExpectWindow{cap});
         }
+cout<<__LINE__<<endl;
+
     } catch (const exception &e) {
         cerr << e.what() << endl;
         return 1;

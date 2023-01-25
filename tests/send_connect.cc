@@ -25,7 +25,7 @@ int main() {
             test.execute(ExpectSegment{}.with_no_flags().with_syn(true).with_payload_size(0).with_seqno(isn));
             test.execute(ExpectBytesInFlight{1});
         }
-
+    cout<<"28"<<endl;
         {
             TCPConfig cfg;
             WrappingInt32 isn(rd());
@@ -40,6 +40,7 @@ int main() {
             test.execute(ExpectNoSegment{});
             test.execute(ExpectBytesInFlight{0});
         }
+    cout<<"43"<<endl;
 
         {
             TCPConfig cfg;
@@ -55,6 +56,7 @@ int main() {
             test.execute(ExpectNoSegment{});
             test.execute(ExpectBytesInFlight{1});
         }
+    cout<<"59"<<endl;
 
         {
             TCPConfig cfg;
