@@ -29,7 +29,12 @@ class Timer {
     Timer(unsigned int rto);
     void doubletime();
     bool isopen() { return opentick; }
-    void start() { opentick = true; }
+    void start() {
+        opentick = true;
+        retransmission_timeout = _rto;
+        times=0;
+        consecutive_times=0;
+    }  // 重新启动
     void close();
 };
 

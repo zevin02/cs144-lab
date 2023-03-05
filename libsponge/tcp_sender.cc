@@ -18,7 +18,7 @@ using namespace std;
 //! \param[in] retx_timeout the initial amount of time to wait before retransmitting the oldest outstanding segment
 //! \param[in] fixed_isn the Initial Sequence Number to use, if set (otherwise uses a random ISN)
 
-Timer::Timer(unsigned int rto) : retransmission_timeout(rto),_rto(rto) {}//构造函数最好按照顺序进行初始化
+Timer::Timer(unsigned int rto) : retransmission_timeout(rto), _rto(rto) {}  // 构造函数最好按照顺序进行初始化
 void Timer::doubletime() {
     if (isopen()) {
         retransmission_timeout *= 2;
@@ -55,13 +55,22 @@ void TCPSender::fill_window() {
     size_t flowwindow =
         win_size ? win_size : 0;  // 制造一个滑动窗口，如果此时的滑动窗口为0,我们也要设置一个位置，进行对窗口进行探测psh
     size_t remain;
-    while ((remain = flowwindow - (_next_seqno - recvd_ack))!=0) {
+    while ((remain = flowwindow - (_next_seqno - recvd_ack)) != 0) {
         // 制作TCP报文
-        TCPSegment seg;
-        size_t length = min(remain, TCPConfig::MAX_PAYLOAD_SIZE);  // 在窗口可容纳的空间和最大值进行取较小的值
-        string str = _stream.read(length);                         // 从流里面读取数据
-        seg.payload() = Buffer(move(str));  // 这个buffer是一个引用计数的字符串，只读
-        sendsegment(seg);                   // 把这个报文发送出去
+        if (!_stream.eof()) {
+            TCPSegment seg;
+            size_t length = min(remain, TCPConfig::MAX_PAYLOAD_SIZE);  // 在窗口可容纳的空间和最大值进行取较小的值
+
+            string str = _stream.read(length);  // 从流里面读取数据
+            seg.payload() = Buffer(move(str));  // 这个buffer是一个引用计数的字符串，只读
+            if (seg.length_in_sequence_space() == 0) {
+                // 都没有数据了，说明这个报文没有用
+                break;
+            } else {
+                //否则就是这个报文有数据
+                sendsegment(seg);  // 把这个报文发送出去
+            }
+        }
     }
 }
 
@@ -79,7 +88,7 @@ void TCPSender::ack_received(const WrappingInt32 ackno, const uint16_t window_si
     }
     recvd_ack = absack;
     win_size = window_size;  // 远程建议我们把滑动窗口设置为这个值
-    while (unackseg.empty()) {
+    while (!unackseg.empty()) {
         TCPSegment front = unackseg.front();
         if (unwrap(front.header().seqno, _isn, _next_seqno) + front.length_in_sequence_space() <= recvd_ack) {
             // 整个数据包的数据都小于这个ack就要进行去掉未发送的数据

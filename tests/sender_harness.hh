@@ -187,7 +187,7 @@ struct Tick : public SenderAction {
         }
     }
 };
-
+//value_or是optional类的一个成员函数，他允许从一个optional对象中检索值，如果该对象不包含值，就返回一个默认值，如果包含值，就返回那个值
 struct AckReceived : public SenderAction {
     WrappingInt32 _ackno;
     std::optional<uint16_t> _window_advertisement{};
@@ -195,7 +195,7 @@ struct AckReceived : public SenderAction {
     AckReceived(WrappingInt32 ackno) : _ackno(ackno) {}
     std::string description() const {
         std::ostringstream ss;
-        ss << "ack " << _ackno.raw_value() << " winsize " << _window_advertisement.value_or(DEFAULT_TEST_WINDOW);
+        ss << "ack " << _ackno.raw_value() << " winsize " << _window_advertisement.value_or(DEFAULT_TEST_WINDOW);//如果这个地方的滑动窗口的值没有设置，我们就给一个默认的值，否则就拿到这个窗口的世纪的值
         return ss.str();
     }
 
@@ -381,23 +381,23 @@ struct ExpectSegment : public SenderExpectation {
 class TCPSenderTestHarness {
     std::queue<TCPSegment> outbound_segments;
     TCPSender sender;
-    std::vector<std::string> steps_executed;
+    std::vector<std::string> steps_executed;//每一步执行的说明
     std::string name;
 
     void collect_output() {
         while (not sender.segments_out().empty()) {
-            outbound_segments.push(std::move(sender.segments_out().front()));
-            sender.segments_out().pop();
+            outbound_segments.push(std::move(sender.segments_out().front()));//
+            sender.segments_out().pop();//这个地方读取到对方的发送的数据
         }
     }
 
   public:
-    TCPSenderTestHarness(const std::string &name_, TCPConfig config)
+    TCPSenderTestHarness(const std::string &name_, TCPConfig config)//这个地方调用构造函数，config里面配置
         : outbound_segments()
-        , sender(config.send_capacity, config.rt_timeout, config.fixed_isn)
+        , sender(config.send_capacity, config.rt_timeout, config.fixed_isn)//这里配置容量，
         , steps_executed()
         , name(name_) {
-        sender.fill_window();
+        sender.fill_window();//在这个地方把数据发送
         collect_output();
         std::ostringstream ss;
         ss << "Initialized with ("
