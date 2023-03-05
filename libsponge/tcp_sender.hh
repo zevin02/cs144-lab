@@ -15,6 +15,24 @@
 //! segments, keeps track of which segments are still in-flight,
 //! maintains the Retransmission Timer, and retransmits in-flight
 //! segments if the retransmission timer expires.
+
+// 重传定时器类
+class Timer {
+  public:
+    unsigned int retransmission_timeout{};
+    size_t consecutive_times = 0;
+    bool opentick = false;  // 用来判断定时器是否开启,有未发送的数据的话，就要打开,没有的话就关闭
+    size_t times = 0;  // 记录过了多少的时间
+    unsigned int _rto = 0;
+
+  public:
+    Timer(unsigned int rto);
+    void doubletime();
+    bool isopen() { return opentick; }
+    void start() { opentick = true; }
+    void close();
+};
+
 class TCPSender {
   private:
     //! our initial sequence number, the number for our SYN.
@@ -28,9 +46,15 @@ class TCPSender {
 
     //! outgoing stream of bytes that have not yet been sent
     ByteStream _stream;
-
+    size_t flighted_bytes = 0;          // 未被ack的字节
+    std::queue<TCPSegment> unackseg{};  // 未被对方ack的报文
     //! the (absolute) sequence number for the next byte to be sent
     uint64_t _next_seqno{0};
+    Timer ti;             // 计时器
+    size_t win_size = 0;  // 记录此时的滑动窗口的大小
+    bool syn = false;
+    bool fin = false;
+    uint64_t recvd_ack = 0;  // 已经收到的ack,用来构建滑动窗口
 
   public:
     //! Initialize a TCPSender
@@ -82,11 +106,14 @@ class TCPSender {
     //!@{
 
     //! \brief absolute seqno for the next byte to be sent
-    uint64_t next_seqno_absolute() const { return _next_seqno; }
+    uint64_t next_seqno_absolute() const { return _next_seqno; }  // 获得下一个需要发送的绝对序列号
 
     //! \brief relative seqno for the next byte to be sent
-    WrappingInt32 next_seqno() const { return wrap(_next_seqno, _isn); }
+    WrappingInt32 next_seqno() const {
+        return wrap(_next_seqno, _isn);
+    }  // 使用这个可以获得下一个需要发送的序列号的相对号码
     //!@}
+    void sendsegment(TCPSegment &seg);  // 发送数据报到网络里面
 };
 
 #endif  // SPONGE_LIBSPONGE_TCP_SENDER_HH
